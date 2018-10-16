@@ -25,36 +25,43 @@ public class OptionManager {
 
 	public GrepExecutor createExecutor() {
 
-		Result result = new Result();
 		GrepExecutor executor = null;
 		if (isRecursive()) {
 			if (isContent()) {
-				executor = (Path dir, String keyword) -> {
+				executor = (dir, keyword) -> {
 					PathStore pathStore = new PathStore();
+					Result result = new Result();
 					contentGrep(dir, keyword, pathStore, result);
 					if (!pathStore.isEmpty()) {
 						contentGrep(pathStore.deQueue(), keyword, pathStore, result);
 					}
+					return result;
 				};
 			} else {
 				executor = (dir, keyword) -> {
 					PathStore pathStore = new PathStore();
+					Result result = new Result();
 					List<BiPredicate<String, String>> fnTests = TestFactory.createTests(options);
 					fileNameGrep(dir, keyword, fnTests, pathStore, result);
 					if (!pathStore.isEmpty()) {
 						fileNameGrep(pathStore.deQueue(), keyword, fnTests, pathStore, result);
 					}
+					return result;
 				};
 			}
 		} else {
 			if (isContent()) {
 				executor = (dir, keyword) -> {
+					Result result = new Result();
 					contentGrep(dir, keyword, result);
+					return result;
 				};
 			} else {
 				executor = (dir, keyword) -> {
+					Result result = new Result();
 					List<BiPredicate<String, String>> fnTests = TestFactory.createTests(options);
 					fileNameGrep(dir, keyword, fnTests, result);
+					return result;
 				};
 			}
 

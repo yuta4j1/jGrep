@@ -80,6 +80,14 @@ public class CommandLineArgs {
 		}
 	}
 
+	public Path getTargetPath() {
+		return targetPath;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
 	public List<String> getOptions() {
 		return this.options;
 	}
