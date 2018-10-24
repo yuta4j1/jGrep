@@ -3,6 +3,7 @@ package com.yutaka.jgrep;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -70,14 +71,11 @@ public class CommandLineArgs {
 	}
 
 	private void strOption2List(String options) {
-
 		String[] optionArray = options.split("");
-		for (int i = 0; i < optionArray.length; i++) {
-			if (i == 0 && !OPTION_PREFIX.equals(optionArray[i])) {
-				throw new IllegalArgumentException("パラメータが不正です。");
-			}
-			this.options.add(optionArray[i]);
+		if (!OPTION_PREFIX.equals(optionArray[0])) {
+			throw new IllegalArgumentException("オプションの指定形式が不正です。");
 		}
+		this.options.addAll(Arrays.asList(optionArray));
 	}
 
 	public Path getTargetPath() {

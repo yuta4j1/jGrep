@@ -2,6 +2,7 @@ package com.yutaka.jgrep.repository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -86,6 +87,9 @@ public class FileRepository {
 			while ((line = reader.readLine()) != null) {
 				lineList.add(line);
 			}
+		} catch (AccessDeniedException e) {
+			// ファイル読み込み権限が無かった場合、通知メッセージのみ表示する。
+			lineList.add(line + " " + "<<対象ファイルの読み取り権限がありません。>>");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
