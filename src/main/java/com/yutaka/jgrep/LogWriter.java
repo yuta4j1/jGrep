@@ -4,8 +4,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.yutaka.jgrep.common.PropertyStore;
@@ -26,6 +26,7 @@ public class LogWriter implements ResultOutput {
 			outputLine.forEach(line -> {
 				try {
 					writer.write(line);
+					writer.newLine();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -36,10 +37,9 @@ public class LogWriter implements ResultOutput {
 	}
 
 	private String getStrTimestamp() {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 		LocalDateTime today = LocalDateTime.now();
 		String strTimeStamp = formatter.format(today);
-		System.out.println(strTimeStamp);
 		return strTimeStamp;
 	}
 
