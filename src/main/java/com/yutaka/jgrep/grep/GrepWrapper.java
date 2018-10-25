@@ -1,6 +1,6 @@
 package com.yutaka.jgrep.grep;
 
-import com.yutaka.jgrep.CommandLineArgs;
+import com.yutaka.jgrep.CommandLineParser;
 import com.yutaka.jgrep.ConsoleWriter;
 import com.yutaka.jgrep.LogWriter;
 import com.yutaka.jgrep.entity.Result;
@@ -13,7 +13,7 @@ public class GrepWrapper {
 		this.executor = executor;
 	}
 
-	public void grep(CommandLineArgs cmd) {
+	public void grep(CommandLineParser cmd) {
 		Result result = executor.execute(cmd.getTargetPath(), cmd.getKeyword());
 		ConsoleWriter console = new ConsoleWriter();
 		console.output(result);

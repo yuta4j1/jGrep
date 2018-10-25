@@ -1,7 +1,7 @@
 package com.yutaka.jgrep;
 
+import com.yutaka.jgrep.grep.ExecutorBuilder;
 import com.yutaka.jgrep.grep.GrepWrapper;
-import com.yutaka.jgrep.option.OptionManager;
 
 /**
  * jGrepエントリークラス
@@ -16,8 +16,8 @@ public class Entry {
 	 */
 	public static void main(String[] args) {
 
-		CommandLineArgs cmd = new CommandLineArgs(args);
-		GrepWrapper wrapper = new GrepWrapper(new OptionManager(cmd.getOptions()).createExecutor());
+		CommandLineParser cmd = new CommandLineParser(args);
+		GrepWrapper wrapper = new GrepWrapper(new ExecutorBuilder(cmd.getOptions()).createExecutor());
 		wrapper.grep(cmd);
 
 	}
