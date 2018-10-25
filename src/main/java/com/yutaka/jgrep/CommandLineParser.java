@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.beust.jcommander.JCommander;
+import com.yutaka.jgrep.option.OptionManager;
+
 /**
  * コマンドライン引数のDTOクラス
  *
  */
-public class CommandLineArgs {
+public class CommandLineParser {
 
 	private static final String OPTION_PREFIX = "-";
 
@@ -28,7 +31,7 @@ public class CommandLineArgs {
 	 *
 	 * @param args コマンドライン引数
 	 */
-	public CommandLineArgs(String[] args) {
+	public CommandLineParser(String[] args) {
 
 		try {
 			if (args.length <= 1) {
@@ -41,6 +44,9 @@ public class CommandLineArgs {
 				setKeyword(args[1]);
 				// 第三引数のオプションをリストとして格納
 				strOption2List(args[2]);
+				OptionManager optionManager = new OptionManager();
+				JCommander.newBuilder().addObject(optionManager).build().parse(strOption2Array(args[2]));
+				System.out.println(optionManager.toString());
 
 			} else {
 				// パスを格納
@@ -76,6 +82,10 @@ public class CommandLineArgs {
 			throw new IllegalArgumentException("オプションの指定形式が不正です。");
 		}
 		this.options.addAll(Arrays.asList(optionArray));
+	}
+
+	private String[] strOption2Array(String options) {
+		return options.split("");
 	}
 
 	public Path getTargetPath() {
