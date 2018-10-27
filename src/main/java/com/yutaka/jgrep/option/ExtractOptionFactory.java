@@ -19,8 +19,10 @@ public class ExtractOptionFactory {
 					if (!ok) {
 						output.add(path.toString());
 						output.add(line);
+						ok = true;
+					} else {
+						output.add(line);
 					}
-					output.add(line);
 				}
 			}
 		});

@@ -17,11 +17,11 @@ public class TestFactory {
 		testsMap.put("e", (target, keyword) -> target.matches(keyword));
 	}
 
-	public static List<BiPredicate<String, String>> createTests(List<String> options) {
+	public static List<BiPredicate<String, String>> createTests(List<String> optionKeys) {
 		List<BiPredicate<String, String>> testList = new ArrayList<>();
-		for (String option : options) {
-			if (testsMap.containsKey(option)) {
-				testList.add(testsMap.get(option));
+		for (String optionKey : optionKeys) {
+			if (testsMap.containsKey(optionKey)) {
+				testList.add(testsMap.get(optionKey));
 			}
 		}
 		if (testList.size() == 0) {

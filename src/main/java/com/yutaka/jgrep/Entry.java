@@ -17,7 +17,7 @@ public class Entry {
 	public static void main(String[] args) {
 
 		CommandLineParser cmd = new CommandLineParser(args);
-		GrepWrapper wrapper = new GrepWrapper(new ExecutorBuilder(cmd.getOptions()).createExecutor());
+		GrepWrapper wrapper = new GrepWrapper(new ExecutorBuilder(cmd.createOptionManager()).createExecutor());
 		wrapper.grep(cmd);
 
 	}

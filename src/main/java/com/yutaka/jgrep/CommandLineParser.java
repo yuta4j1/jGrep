@@ -1,3 +1,4 @@
+
 package com.yutaka.jgrep;
 
 import java.nio.file.Path;
@@ -9,21 +10,28 @@ import java.util.List;
 import com.beust.jcommander.JCommander;
 import com.yutaka.jgrep.option.OptionManager;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * コマンドライン引数のDTOクラス
  *
  */
 public class CommandLineParser {
 
-	private static final String OPTION_PREFIX = "-";
+	private static final String HYPHEN = "-";
 
 	/** 対象ディレクトリパス */
+	@Getter
 	private Path targetPath;
 
 	/** 検索対象キーワード */
+	@Getter
+	@Setter
 	private String keyword;
 
-	/** オプション文字列リスト */
+	/** オプション引数リスト */
+	@Getter
 	private List<String> options = new ArrayList<>();
 
 	/**
@@ -42,11 +50,7 @@ public class CommandLineParser {
 				setTargetPath(args[0]);
 				// キーワードを格納
 				setKeyword(args[1]);
-				// 第三引数のオプションをリストとして格納
-				strOption2List(args[2]);
-				OptionManager optionManager = new OptionManager();
-				JCommander.newBuilder().addObject(optionManager).build().parse(strOption2Array(args[2]));
-				System.out.println(optionManager.toString());
+				setOptions(args[2]);
 
 			} else {
 				// パスを格納
@@ -72,37 +76,41 @@ public class CommandLineParser {
 		}
 	}
 
-	private void setKeyword(final String keyword) {
-		this.keyword = keyword;
+	private void setOptions(String option) {
+		this.options.add(option);
 	}
 
-	private void strOption2List(String options) {
-		String[] optionArray = options.split("");
-		if (!OPTION_PREFIX.equals(optionArray[0])) {
-			throw new IllegalArgumentException("オプションの指定形式が不正です。");
-		}
-		this.options.addAll(Arrays.asList(optionArray));
-	}
-
-	private String[] strOption2Array(String options) {
-		return options.split("");
-	}
-
-	public Path getTargetPath() {
-		return targetPath;
-	}
-
-	public String getKeyword() {
-		return keyword;
-	}
-
-	public List<String> getOptions() {
-		return this.options;
-	}
+//	private void strOption2List(String options) {
+//		String[] optionArray = options.split("");
+//		if (!OPTION_PREFIX.equals(optionArray[0])) {
+//			throw new IllegalArgumentException("オプションの指定形式が不正です。");
+//		}
+//		this.options.addAll(Arrays.asList(optionArray));
+//	}
 
 	private boolean isValidPath(Path path) {
 		// TODO 相対パスと絶対パスの判別。
 		return true;
+	}
+
+	private String[] makeParseTarget() {
+		List<String> args = this.options;
+		List<String> target = new ArrayList<>();
+		for (String arg : args) {
+			if (HYPHEN.equals(String.valueOf(arg.charAt(0)))) {
+				target.addAll(Arrays.asList(arg.split("")));
+			} else {
+				target.add(arg);
+			}
+		}
+		return target.toArray(new String[target.size()]);
+	}
+
+	public OptionManager createOptionManager() {
+		OptionManager optionManager = new OptionManager();
+		JCommander.newBuilder().addObject(optionManager).build().parse(makeParseTarget());
+		System.out.println(optionManager.toString());
+		return optionManager;
 	}
 
 }
