@@ -34,7 +34,7 @@ public class ExecutorBuilder {
 					PathStore pathStore = new PathStore();
 					Result result = new Result();
 					contentGrep(dir, keyword, pathStore, result);
-					if (!pathStore.isEmpty()) {
+					while (!pathStore.isEmpty()) {
 						contentGrep(pathStore.deQueue(), keyword, pathStore, result);
 					}
 					return result;
@@ -45,7 +45,7 @@ public class ExecutorBuilder {
 					Result result = new Result();
 					List<BiPredicate<String, String>> fnTests = TestFactory.createTests(optionManager.makeFnTestKey());
 					fileNameGrep(dir, keyword, fnTests, pathStore, result);
-					if (!pathStore.isEmpty()) {
+					while (!pathStore.isEmpty()) {
 						fileNameGrep(pathStore.deQueue(), keyword, fnTests, pathStore, result);
 					}
 					return result;
