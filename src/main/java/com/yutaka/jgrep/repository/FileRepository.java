@@ -6,11 +6,16 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.yutaka.jgrep.common.PropertyStore;
 import com.yutaka.jgrep.common.Util;
 import com.yutaka.jgrep.entity.ExtractLineParameter;
 import com.yutaka.jgrep.entity.PathStore;
@@ -22,6 +27,16 @@ import com.yutaka.jgrep.option.ExtractOption;
  *
  */
 public class FileRepository {
+
+	// grep対象となる拡張子Set ("txt", "csv"はデフォルト設定)
+	private static Set<String> targetExtensions = new HashSet<>(Arrays.asList("txt", "csv"));
+
+	static {
+		String val = PropertyStore.getPropValue("extensions");
+		if (val != null) {
+			Collections.addAll(targetExtensions, val.split(","));
+		}
+	}
 
 	/**
 	 * 指定パス配下のファイルパスリストを取得する。
@@ -115,7 +130,7 @@ public class FileRepository {
 	private static boolean isValidExtension(Path path) {
 		String[] splitted = path.toString().split("\\.");
 		String extension = splitted[splitted.length - 1];
-		return "txt".equals(extension) || "csv".equals(extension);
+		return targetExtensions.stream().anyMatch(e -> e.equals(extension));
 	}
 
 	/**
